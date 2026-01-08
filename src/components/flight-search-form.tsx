@@ -1,351 +1,201 @@
 "use client"
 
-import type React from "react"
-
+import * as React from "react"
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Search, Plane, Hotel, ExternalLink, Calendar, Users } from "lucide-react"
+import { useRouter } from "next/navigation"
+
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from "@/lib/supabase/client"
-import { Search, Plane, Calendar, Users } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { AirportCombobox } from "./airport-combobox"
 
-interface Flight {
-  id: string
-  airline: string
-  flight_number: string
-  origin: string
-  destination: string
-  departure_time: string
-  arrival_time: string
-  price: number
-  seats_available: number
-}
-
-interface FlightSearchFormProps {
-  userId: string
-}
-
-export function FlightSearchForm({ userId }: FlightSearchFormProps) {
-  const [tripType, setTripType] = useState<"one-way" | "round-trip">("one-way")
-  const [searchParams, setSearchParams] = useState({
-    origin: "",
-    destination: "",
-    departureDate: "",
-    returnDate: "",
-    passengers: 1,
-  })
-  const [flights, setFlights] = useState<Flight[]>([])
-  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null)
-  const [reason, setReason] = useState("")
-  const [isSearching, setIsSearching] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+export function FlightSearchForm({ userId }: { userId: string }) {
   const router = useRouter()
   const supabase = createClient()
+  
+  const [activeTab, setActiveTab] = useState("flights")
+  const [flights, setFlights] = useState<any[]>([])
+  const [hotels, setHotels] = useState<any[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [selectedFlight, setSelectedFlight] = useState<any>(null)
+  const [reason, setReason] = useState("")
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const [flightParams, setFlightParams] = useState({ 
+    origin: "", destination: "", departureDate: "", returnDate: "", passengers: 1 
+  })
+  const [hotelParams, setHotelParams] = useState({ 
+    location: "", checkIn: "", checkOut: "" 
+  })
+
+  const handleFlightSearch = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSearching(true)
     setError(null)
     setFlights([])
-    setSelectedFlight(null)
 
     try {
-      const departureDate = new Date(searchParams.departureDate)
+      const res = await fetch(`/api/search?type=flight&origin=${flightParams.origin}&destination=${flightParams.destination}&departureDate=${flightParams.departureDate}&returnDate=${flightParams.returnDate}&adults=${flightParams.passengers}`)
+      const data = await res.json()
+      if (data.length > 0) setFlights(data)
+      else setError("Nenhum voo encontrado para esta data.")
+    } catch {
+      setError("Erro ao conectar com o serviço de busca.")
+    } finally {
+      setIsSearching(false)
+    }
+  }
 
-      const query = supabase
-        .from("flights")
-        .select("*")
-        .ilike("origin", `%${searchParams.origin}%`)
-        .ilike("destination", `%${searchParams.destination}%`)
-        .gte("departure_time", departureDate.toISOString())
-        .gte("seats_available", searchParams.passengers)
-        .order("departure_time", { ascending: true })
+  const handleHotelSearch = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSearching(true)
+    setHotels([])
 
-      const { data, error } = await query
-
-      if (error) throw error
-
-      if (!data || data.length === 0) {
-        setError("No flights found for your search criteria")
-      } else {
-        setFlights(data as Flight[])
-      }
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred while searching")
+    try {
+      const res = await fetch(`/api/search?type=hotel&q=${hotelParams.location}&checkIn=${hotelParams.checkIn}&checkOut=${hotelParams.checkOut}`)
+      const data = await res.json()
+      setHotels(data)
+    } catch {
+      setError("Erro ao buscar hotéis.")
     } finally {
       setIsSearching(false)
     }
   }
 
   const handleCreateRequest = async () => {
-    if (!selectedFlight || !reason.trim()) {
-      setError("Please select a flight and provide a reason for your request")
-      return
-    }
+    if (!selectedFlight || !reason) return
+    // Lógica de salvamento no Supabase (conforme discutido anteriormente)
+    const { data: flight } = await supabase.from("flights").insert({
+      airline: selectedFlight.airline,
+      flight_number: selectedFlight.flight_number,
+      origin: selectedFlight.origin,
+      destination: selectedFlight.destination,
+      departure_time: selectedFlight.departure_time,
+      arrival_time: selectedFlight.arrival_time,
+      price: selectedFlight.price,
+      seats_available: 1
+    }).select().single()
 
-    setIsSubmitting(true)
-    setError(null)
-
-    try {
-      const { error } = await supabase.from("flight_requests").insert({
-        user_id: userId,
-        flight_id: selectedFlight.id,
-        origin: selectedFlight.origin,
-        destination: selectedFlight.destination,
-        departure_date: new Date(selectedFlight.departure_time).toISOString().split("T")[0],
-        return_date: tripType === "round-trip" && searchParams.returnDate ? searchParams.returnDate : null,
-        trip_type: tripType,
-        passengers: searchParams.passengers,
-        reason: reason,
-        total_price: selectedFlight.price * searchParams.passengers,
-        status: "pending",
-      })
-
-      if (error) throw error
-
-      setSuccess(true)
-      setTimeout(() => {
-        router.push("/requests")
-      }, 2000)
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred while creating request")
-    } finally {
-      setIsSubmitting(false)
-    }
+    await supabase.from("flight_requests").insert({
+      user_id: userId,
+      flight_id: flight.id,
+      origin: flight.origin,
+      destination: flight.destination,
+      departure_date: flightParams.departureDate,
+      reason,
+      total_price: selectedFlight.price * flightParams.passengers,
+      status: "pending"
+    })
+    router.push("/requests")
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Search Criteria</CardTitle>
-          <CardDescription>Enter your travel details to find available flights</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSearch} className="flex flex-col gap-6">
-            <RadioGroup value={tripType} onValueChange={(value) => setTripType(value as "one-way" | "round-trip")}>
-              <div className="flex gap-4">
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="one-way" id="one-way" />
-                  <Label htmlFor="one-way">One way</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="round-trip" id="round-trip" />
-                  <Label htmlFor="round-trip">Round trip</Label>
-                </div>
-              </div>
-            </RadioGroup>
+      <Tabs defaultValue="flights" onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="flights" className="gap-2"><Plane className="h-4 w-4"/> Voos</TabsTrigger>
+          <TabsTrigger value="hotels" className="gap-2"><Hotel className="h-4 w-4"/> Hotéis</TabsTrigger>
+        </TabsList>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="grid gap-2">
-                <Label htmlFor="origin">From</Label>
-                <div className="relative">
-                  <Plane className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="origin"
-                    placeholder="São Paulo (GRU)"
-                    className="pl-9"
-                    required
-                    value={searchParams.origin}
-                    onChange={(e) => setSearchParams({ ...searchParams, origin: e.target.value })}
-                  />
+        <TabsContent value="flights">
+          <Card>
+            <CardHeader><CardTitle>Buscar Voos Reais</CardTitle></CardHeader>
+            <CardContent>
+              <form onSubmit={handleFlightSearch} className="grid gap-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <AirportCombobox value={flightParams.origin} onChange={(v) => setFlightParams({...flightParams, origin: v})} placeholder="Origem" />
+                  <AirportCombobox value={flightParams.destination} onChange={(v) => setFlightParams({...flightParams, destination: v})} placeholder="Destino" />
                 </div>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="destination">To</Label>
-                <div className="relative">
-                  <Plane className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="destination"
-                    placeholder="Rio de Janeiro (GIG)"
-                    className="pl-9"
-                    required
-                    value={searchParams.destination}
-                    onChange={(e) => setSearchParams({ ...searchParams, destination: e.target.value })}
-                  />
+                <Input type="date" value={flightParams.departureDate} onChange={(e) => setFlightParams({...flightParams, departureDate: e.target.value})} />
+                <Button type="submit" disabled={isSearching} className="w-full">
+                  {isSearching ? "Buscando..." : "Buscar Passagens"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="hotels">
+          <Card>
+            <CardHeader><CardTitle>Buscar Hotéis</CardTitle></CardHeader>
+            <CardContent>
+              <form onSubmit={handleHotelSearch} className="grid gap-4">
+                <Input placeholder="Cidade ou Hotel" value={hotelParams.location} onChange={(e) => setHotelParams({...hotelParams, location: e.target.value})} />
+                <div className="grid grid-cols-2 gap-4">
+                  <Input type="date" value={hotelParams.checkIn} onChange={(e) => setHotelParams({...hotelParams, checkIn: e.target.value})} />
+                  <Input type="date" value={hotelParams.checkOut} onChange={(e) => setHotelParams({...hotelParams, checkOut: e.target.value})} />
                 </div>
-              </div>
-            </div>
+                <Button type="submit" variant="secondary" className="w-full">Buscar Hotéis</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="grid gap-2">
-                <Label htmlFor="departureDate">Departure Date</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="departureDate"
-                    type="date"
-                    className="pl-9"
-                    required
-                    min={new Date().toISOString().split("T")[0]}
-                    value={searchParams.departureDate}
-                    onChange={(e) => setSearchParams({ ...searchParams, departureDate: e.target.value })}
-                  />
-                </div>
-              </div>
-              {tripType === "round-trip" && (
-                <div className="grid gap-2">
-                  <Label htmlFor="returnDate">Return Date</Label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="returnDate"
-                      type="date"
-                      className="pl-9"
-                      min={searchParams.departureDate || new Date().toISOString().split("T")[0]}
-                      value={searchParams.returnDate}
-                      onChange={(e) => setSearchParams({ ...searchParams, returnDate: e.target.value })}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="passengers">Passengers</Label>
-              <div className="relative">
-                <Users className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="passengers"
-                  type="number"
-                  min="1"
-                  max="9"
-                  className="pl-9"
-                  required
-                  value={searchParams.passengers}
-                  onChange={(e) => setSearchParams({ ...searchParams, passengers: Number.parseInt(e.target.value) })}
-                />
-              </div>
-            </div>
-
-            {error && !flights.length && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Button type="submit" disabled={isSearching} className="w-full">
-              <Search className="mr-2 h-4 w-4" />
-              {isSearching ? "Searching..." : "Search Flights"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
+      {/* RENDERIZAÇÃO DE VOOS */}
       {flights.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Available Flights</CardTitle>
-            <CardDescription>Select a flight to create your request</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-3">
-              {flights.map((flight) => (
-                <button
-                  key={flight.id}
-                  onClick={() => setSelectedFlight(flight)}
-                  className={`w-full rounded-lg border p-4 text-left transition-colors hover:bg-muted ${
-                    selectedFlight?.id === flight.id ? "border-primary bg-muted" : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="font-semibold">{flight.airline}</span>
-                        <span className="text-sm text-muted-foreground">{flight.flight_number}</span>
-                      </div>
-                      <div className="flex items-center gap-4 text-sm">
-                        <div>
-                          <p className="font-medium">
-                            {new Date(flight.departure_time).toLocaleTimeString("en-US", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </p>
-                          <p className="text-muted-foreground">{flight.origin}</p>
-                        </div>
-                        <div className="flex-1 border-t border-dashed" />
-                        <div className="text-right">
-                          <p className="font-medium">
-                            {new Date(flight.arrival_time).toLocaleTimeString("en-US", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </p>
-                          <p className="text-muted-foreground">{flight.destination}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="ml-4 text-right">
-                      <p className="text-2xl font-bold">R$ {flight.price.toFixed(2)}</p>
-                      <p className="text-xs text-muted-foreground">{flight.seats_available} seats left</p>
-                    </div>
+        <div className="grid gap-3">
+          {flights.map((f) => (
+            <button key={f.id} onClick={() => setSelectedFlight(f)} className={cn("p-4 border rounded-xl text-left hover:bg-muted", selectedFlight?.id === f.id && "border-primary bg-primary/5")}>
+              <div className="flex justify-between items-center">
+                <div className="flex gap-4 items-center">
+                  {f.airline_logo && <img src={f.airline_logo} className="h-8 w-8 object-contain" />}
+                  <div>
+                    <p className="font-bold">{f.airline} <span className="text-xs font-normal opacity-50">({f.flight_number})</span></p>
+                    <p className="text-sm">{f.origin} → {f.destination}</p>
                   </div>
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {selectedFlight && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Request Details</CardTitle>
-            <CardDescription>Provide a reason for your travel request</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-4">
-              <div className="rounded-lg border bg-muted/50 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold">{selectedFlight.airline}</span>
-                  <span className="text-2xl font-bold">
-                    R$ {(selectedFlight.price * searchParams.passengers).toFixed(2)}
-                  </span>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  {selectedFlight.origin} → {selectedFlight.destination} • {searchParams.passengers} passenger(s)
-                </p>
+                <p className="text-xl font-bold text-primary">R$ {f.price}</p>
               </div>
+            </button>
+          ))}
+        </div>
+      )}
 
-              <div className="grid gap-2">
-                <Label htmlFor="reason">Reason for Travel</Label>
-                <Textarea
-                  id="reason"
-                  placeholder="e.g., Client meeting, Conference attendance, Site visit..."
-                  rows={4}
-                  required
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                />
+      {/* RENDERIZAÇÃO DE HOTÉIS COM BOTÃO DE RESERVA EXTERNA */}
+      {hotels.length > 0 && (activeTab === "hotels") && (
+        <div className="grid md:grid-cols-2 gap-4">
+          {hotels.map((h) => (
+            <Card key={h.property_token} className="overflow-hidden flex flex-col">
+              <div className="h-40 bg-muted">
+                {h.images?.[0] && <img src={h.images[0].thumbnail} className="w-full h-full object-cover" />}
               </div>
+              <CardHeader className="p-4 flex-1">
+                <CardTitle className="text-base">{h.name}</CardTitle>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="font-bold text-primary">{h.rate_per_night?.lowest || "Sob consulta"}</span>
+                  <Badge variant="secondary">{h.overall_rating} ★</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4 pt-0">
+                <Button variant="outline" className="w-full gap-2" onClick={() => window.open(h.link, "_blank")}>
+                  Reservar no Site <ExternalLink className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
-              {error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-
-              {success && (
-                <Alert>
-                  <AlertDescription>Request created successfully! Redirecting...</AlertDescription>
-                </Alert>
-              )}
-
-              <Button onClick={handleCreateRequest} disabled={isSubmitting || success} className="w-full" size="lg">
-                {isSubmitting ? "Creating Request..." : "Create Request"}
-              </Button>
-            </div>
+      {selectedFlight && activeTab === "flights" && (
+        <Card className="border-primary/30 mt-4">
+          <CardContent className="pt-6 grid gap-4">
+            <Textarea placeholder="Descreva o motivo da viagem corporativa..." value={reason} onChange={(e) => setReason(e.target.value)} />
+            <Button onClick={handleCreateRequest} className="w-full h-12 text-lg">Enviar para Aprovação</Button>
           </CardContent>
         </Card>
       )}
+
+      {error && <Alert variant="destructive" className="mt-4"><AlertDescription>{error}</AlertDescription></Alert>}
     </div>
   )
 }
