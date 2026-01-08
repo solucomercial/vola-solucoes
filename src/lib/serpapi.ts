@@ -1,5 +1,3 @@
-import { FlightResult, HotelProperty } from "@/types/travel";
-
 const SERPAPI_KEY = process.env.SERPAPI_KEY;
 
 export async function searchFlights(params: {
