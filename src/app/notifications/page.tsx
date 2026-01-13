@@ -41,7 +41,7 @@ export default async function NotificationsPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <Plane className="h-4 w-4 text-primary-foreground" />
               </div>
-              <h1 className="text-xl font-semibold">Notifications</h1>
+              <h1 className="text-xl font-semibold">Notificações</h1>
             </div>
           </div>
           <UserNav user={profile || {}} />
@@ -52,23 +52,23 @@ export default async function NotificationsPage() {
         <div className="container py-8 px-4">
           <div className="mx-auto max-w-3xl">
             <div className="mb-8">
-              <h2 className="text-3xl font-bold">Notifications</h2>
-              <p className="text-muted-foreground">Stay updated on your flight request status</p>
+              <h2 className="text-3xl font-bold">Notificações</h2>
+              <p className="text-muted-foreground">Acompanhe o status da sua solicitação de voo</p>
             </div>
 
             {unreadNotifications.length === 0 && readNotifications.length === 0 ? (
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <Bell className="h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">No notifications</h3>
-                  <p className="text-sm text-muted-foreground">You&apos;re all caught up</p>
+                  <h3 className="text-lg font-semibold mb-2">Nenhuma notificação</h3>
+                  <p className="text-sm text-muted-foreground">Você está atualizado</p>
                 </CardContent>
               </Card>
             ) : (
               <div className="flex flex-col gap-6">
                 {unreadNotifications.length > 0 && (
                   <div>
-                    <h3 className="mb-4 text-lg font-semibold">Unread</h3>
+                    <h3 className="mb-4 text-lg font-semibold">Não lido</h3>
                     <div className="flex flex-col gap-2">
                       {unreadNotifications.map((notification) => (
                         <NotificationItem key={notification.id} notification={notification} />
@@ -79,7 +79,7 @@ export default async function NotificationsPage() {
 
                 {readNotifications.length > 0 && (
                   <div>
-                    <h3 className="mb-4 text-lg font-semibold">Read</h3>
+                    <h3 className="mb-4 text-lg font-semibold">Lido</h3>
                     <div className="flex flex-col gap-2">
                       {readNotifications.map((notification) => (
                         <NotificationItem key={notification.id} notification={notification} />

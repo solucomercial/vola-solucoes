@@ -69,7 +69,7 @@ export default async function ApprovalsPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <Plane className="h-4 w-4 text-primary-foreground" />
               </div>
-              <h1 className="text-xl font-semibold">Approval Dashboard</h1>
+              <h1 className="text-xl font-semibold">Painel de aprovação</h1>
             </div>
           </div>
           <UserNav user={profile || {}} />
@@ -80,8 +80,8 @@ export default async function ApprovalsPage() {
         <div className="container py-8 px-4">
           <div className="mx-auto max-w-6xl">
             <div className="mb-8">
-              <h2 className="text-3xl font-bold">Review Requests</h2>
-              <p className="text-muted-foreground">Approve or reject flight requests from your team</p>
+              <h2 className="text-3xl font-bold">Solicitações de revisão</h2>
+              <p className="text-muted-foreground">Aprovar ou rejeitar solicitações de voo do seu time</p>
             </div>
 
             <Tabs defaultValue="pending" className="w-full">
@@ -89,7 +89,7 @@ export default async function ApprovalsPage() {
                 <TabsTrigger value="pending">
                   Pending {pendingCount > 0 && <Badge className="ml-2">{pendingCount}</Badge>}
                 </TabsTrigger>
-                <TabsTrigger value="history">History</TabsTrigger>
+                <TabsTrigger value="history">Histórico</TabsTrigger>
               </TabsList>
 
               <TabsContent value="pending" className="mt-6">
@@ -103,7 +103,7 @@ export default async function ApprovalsPage() {
                               <CardTitle className="flex items-center gap-2">
                                 {request.origin} → {request.destination}
                                 <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                                  Pending
+                                  Pendente
                                 </Badge>
                               </CardTitle>
                               <CardDescription>
@@ -135,7 +135,7 @@ export default async function ApprovalsPage() {
                             <div className="grid gap-3 text-sm">
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                                <span className="font-medium">Departure:</span>
+                                <span className="font-medium">Partida:</span>
                                 <span>
                                   {new Date(request.departure_date).toLocaleDateString()} at{" "}
                                   {request.flights?.departure_time
@@ -149,20 +149,20 @@ export default async function ApprovalsPage() {
                               {request.return_date && (
                                 <div className="flex items-center gap-2">
                                   <Calendar className="h-4 w-4 text-muted-foreground" />
-                                  <span className="font-medium">Return:</span>
+                                  <span className="font-medium">Retorno:</span>
                                   <span>{new Date(request.return_date).toLocaleDateString()}</span>
                                 </div>
                               )}
                               <div className="flex items-start gap-2">
                                 <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
-                                <span className="font-medium">Reason:</span>
+                                <span className="font-medium">Motivo:</span>
                                 <span className="flex-1">{request.reason}</span>
                               </div>
                             </div>
 
                             <div className="flex items-center justify-between pt-3 border-t">
                               <p className="text-xs text-muted-foreground">
-                                Submitted {new Date(request.created_at).toLocaleDateString()}
+                                Enviada {new Date(request.created_at).toLocaleDateString()}
                               </p>
                               <ApprovalActions requestId={request.id} approverId={data.user.id} />
                             </div>
@@ -175,8 +175,8 @@ export default async function ApprovalsPage() {
                   <Card>
                     <CardContent className="flex flex-col items-center justify-center py-12">
                       <Plane className="h-12 w-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No pending requests</h3>
-                      <p className="text-sm text-muted-foreground">All requests have been reviewed</p>
+                      <h3 className="text-lg font-semibold mb-2">Nenhuma solicitação pendente</h3>
+                      <p className="text-sm text-muted-foreground">Todas as solicitações foram revisadas</p>
                     </CardContent>
                   </Card>
                 )}
@@ -229,25 +229,25 @@ export default async function ApprovalsPage() {
                               <div className="grid gap-3 text-sm">
                                 <div className="flex items-center gap-2">
                                   <Calendar className="h-4 w-4 text-muted-foreground" />
-                                  <span className="font-medium">Departure:</span>
+                                  <span className="font-medium">Partida:</span>
                                   <span>{new Date(request.departure_date).toLocaleDateString()}</span>
                                 </div>
                                 <div className="flex items-start gap-2">
                                   <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
-                                  <span className="font-medium">Reason:</span>
+                                  <span className="font-medium">Motivo:</span>
                                   <span className="flex-1">{request.reason}</span>
                                 </div>
                               </div>
 
                               {approval.comments && (
                                 <div className="rounded-lg border bg-muted/30 p-3 text-sm">
-                                  <p className="font-medium mb-1">Your comments:</p>
+                                  <p className="font-medium mb-1">Seus comentários:</p>
                                   <p className="text-muted-foreground">{approval.comments}</p>
                                 </div>
                               )}
 
                               <p className="text-xs text-muted-foreground pt-3 border-t">
-                                Reviewed on {new Date(approval.created_at).toLocaleDateString()}
+                                Revisado em {new Date(approval.created_at).toLocaleDateString()}
                               </p>
                             </div>
                           </CardContent>
@@ -259,8 +259,8 @@ export default async function ApprovalsPage() {
                   <Card>
                     <CardContent className="flex flex-col items-center justify-center py-12">
                       <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No approval history</h3>
-                      <p className="text-sm text-muted-foreground">You haven&apos;t reviewed any requests yet</p>
+                      <h3 className="text-lg font-semibold mb-2">Sem histórico de aprovação</h3>
+                      <p className="text-sm text-muted-foreground">Você ainda não revisou nenhuma solicitação</p>
                     </CardContent>
                   </Card>
                 )}

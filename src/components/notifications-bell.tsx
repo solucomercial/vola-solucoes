@@ -46,7 +46,7 @@ export function NotificationsBell({ notifications, unreadCount }: NotificationsB
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
-        <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+        <DropdownMenuLabel>Notificações</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {recentNotifications.length > 0 ? (
           <>
@@ -65,7 +65,7 @@ export function NotificationsBell({ notifications, unreadCount }: NotificationsB
                   <span className="font-medium text-sm">{notification.title}</span>
                   {!notification.read && (
                     <Badge variant="secondary" className="ml-auto text-xs">
-                      New
+                      Nova
                     </Badge>
                   )}
                 </div>
@@ -78,7 +78,7 @@ export function NotificationsBell({ notifications, unreadCount }: NotificationsB
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/notifications" className="text-center justify-center">
-                View all notifications
+                Ver todas as notificações
               </Link>
             </DropdownMenuItem>
           </>

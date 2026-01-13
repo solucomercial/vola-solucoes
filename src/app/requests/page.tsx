@@ -70,7 +70,7 @@ export default async function RequestsPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <Plane className="h-4 w-4 text-primary-foreground" />
               </div>
-              <h1 className="text-xl font-semibold">My Requests</h1>
+              <h1 className="text-xl font-semibold">Minhas Solicitações</h1>
             </div>
           </div>
           <UserNav user={profile || {}} />
@@ -82,13 +82,13 @@ export default async function RequestsPage() {
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 flex items-center justify-between">
               <div>
-                <h2 className="text-3xl font-bold">Flight Requests</h2>
-                <p className="text-muted-foreground">Track and manage your travel requests</p>
+                <h2 className="text-3xl font-bold">Solicitações de Voo</h2>
+                <p className="text-muted-foreground">Acompanhe e gerencie suas solicitações de viagem</p>
               </div>
               <Button asChild>
                 <Link href="/flights/search">
                   <Plane className="mr-2 h-4 w-4" />
-                  New Request
+                  Nova Solicitação
                 </Link>
               </Button>
             </div>
@@ -96,7 +96,7 @@ export default async function RequestsPage() {
             <div className="flex flex-col gap-8">
               {pendingRequests.length > 0 && (
                 <div>
-                  <h3 className="mb-4 text-lg font-semibold">Pending Approval</h3>
+                  <h3 className="mb-4 text-lg font-semibold">Aguardando Aprovação</h3>
                   <div className="flex flex-col gap-4">
                     {pendingRequests.map((request) => (
                       <Card key={request.id}>
@@ -106,7 +106,7 @@ export default async function RequestsPage() {
                               <CardTitle className="flex items-center gap-2">
                                 {request.origin} → {request.destination}
                                 <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                                  Pending
+                                  Pendente
                                 </Badge>
                               </CardTitle>
                               <CardDescription>
@@ -123,7 +123,7 @@ export default async function RequestsPage() {
                             <div className="grid gap-3 text-sm">
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                                <span className="font-medium">Departure:</span>
+                                <span className="font-medium">Partida:</span>
                                 <span>
                                   {new Date(request.departure_date).toLocaleDateString()} at{" "}
                                   {request.flights?.departure_time
@@ -136,18 +136,18 @@ export default async function RequestsPage() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Users className="h-4 w-4 text-muted-foreground" />
-                                <span className="font-medium">Passengers:</span>
+                                <span className="font-medium">Passageiros:</span>
                                 <span>{request.passengers}</span>
                               </div>
                               <div className="flex items-start gap-2">
                                 <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
-                                <span className="font-medium">Reason:</span>
+                                <span className="font-medium">Motivo:</span>
                                 <span className="flex-1">{request.reason}</span>
                               </div>
                             </div>
                             <div className="flex items-center justify-between pt-3 border-t">
                               <p className="text-xs text-muted-foreground">
-                                Submitted {new Date(request.created_at).toLocaleDateString()}
+                                Enviado {new Date(request.created_at).toLocaleDateString()}
                               </p>
                               <RequestActions requestId={request.id} status={request.status} />
                             </div>
@@ -161,7 +161,7 @@ export default async function RequestsPage() {
 
               {completedRequests.length > 0 && (
                 <div>
-                  <h3 className="mb-4 text-lg font-semibold">Completed Requests</h3>
+                  <h3 className="mb-4 text-lg font-semibold">Solicitações Concluídas</h3>
                   <div className="flex flex-col gap-4">
                     {completedRequests.map((request) => (
                       <Card key={request.id}>
@@ -195,7 +195,7 @@ export default async function RequestsPage() {
                             <div className="grid gap-3 text-sm">
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                                <span className="font-medium">Departure:</span>
+                                <span className="font-medium">Partida:</span>
                                 <span>
                                   {new Date(request.departure_date).toLocaleDateString()} at{" "}
                                   {request.flights?.departure_time
@@ -208,12 +208,12 @@ export default async function RequestsPage() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <Users className="h-4 w-4 text-muted-foreground" />
-                                <span className="font-medium">Passengers:</span>
+                                <span className="font-medium">Passageiros:</span>
                                 <span>{request.passengers}</span>
                               </div>
                               <div className="flex items-start gap-2">
                                 <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
-                                <span className="font-medium">Reason:</span>
+                                <span className="font-medium">Motivo:</span>
                                 <span className="flex-1">{request.reason}</span>
                               </div>
                             </div>
@@ -243,10 +243,10 @@ export default async function RequestsPage() {
                 <Card>
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <Plane className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No requests yet</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Start by searching for flights</p>
+                    <h3 className="text-lg font-semibold mb-2">Ainda não há solicitações</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Comece pesquisando voos</p>
                     <Button asChild>
-                      <Link href="/flights/search">Search Flights</Link>
+                      <Link href="/flights/search">Pesquisar voos</Link>
                     </Button>
                   </CardContent>
                 </Card>

@@ -46,7 +46,7 @@ export default async function DashboardPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Plane className="h-4 w-4 text-primary-foreground" />
             </div>
-            <h1 className="text-xl font-semibold">Flight Request System</h1>
+            <h1 className="text-xl font-semibold">Sistema de solicitação de voo</h1>
           </div>
           <div className="flex items-center gap-2">
             <NotificationsBell notifications={notifications || []} unreadCount={unreadNotifications.length} />
@@ -58,53 +58,53 @@ export default async function DashboardPage() {
       <main className="flex-1 bg-muted/40">
         <div className="container py-8 px-4">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold">Welcome back, {profile?.full_name || "User"}</h2>
-            <p className="text-muted-foreground">Manage your flight requests and track approvals</p>
+            <h2 className="text-3xl font-bold">Bem-vindo de volta, {profile?.full_name || "User"}</h2>
+            <p className="text-muted-foreground">Gerencie suas solicitações de voo e acompanhe as aprovações.</p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
+                <CardTitle className="text-sm font-medium">Solicitações Pendentes</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{pendingCount}</div>
-                <p className="text-xs text-muted-foreground">Awaiting approval</p>
+                <p className="text-xs text-muted-foreground">Aguardando aprovação</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Approved</CardTitle>
+                <CardTitle className="text-sm font-medium">Aprovadas</CardTitle>
                 <CheckCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{approvedCount}</div>
-                <p className="text-xs text-muted-foreground">Ready to book</p>
+                <p className="text-xs text-muted-foreground">Pronto para reservar</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+                <CardTitle className="text-sm font-medium">Rejeitadas</CardTitle>
                 <XCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{rejectedCount}</div>
-                <p className="text-xs text-muted-foreground">Not approved</p>
+                <p className="text-xs text-muted-foreground">Não aprovadas</p>
               </CardContent>
             </Card>
 
             <Link href="/notifications">
               <Card className="transition-colors hover:bg-muted/50 cursor-pointer h-full">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">Notifications</CardTitle>
+                  <CardTitle className="text-sm font-medium">Notificações</CardTitle>
                   <Bell className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{unreadNotifications.length}</div>
-                  <p className="text-xs text-muted-foreground">Unread messages</p>
+                  <p className="text-xs text-muted-foreground">Mensagens não lidas</p>
                 </CardContent>
               </Card>
             </Link>
@@ -113,22 +113,22 @@ export default async function DashboardPage() {
           <div className="grid gap-6 lg:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Get started with your flight requests</CardDescription>
+                <CardTitle>Ações Rápidas</CardTitle>
+                <CardDescription>Comece com suas solicitações de voo</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-3">
                 <Button asChild size="lg" className="w-full">
                   <Link href="/flights/search">
                     <Plane className="mr-2 h-4 w-4" />
-                    Search Flights
+                    Pesquisar voos
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="w-full bg-transparent">
-                  <Link href="/requests">View My Requests</Link>
+                  <Link href="/requests">Ver minhas solicitações</Link>
                 </Button>
                 {(profile?.role === "approver" || profile?.role === "admin") && (
                   <Button asChild variant="outline" size="lg" className="w-full bg-transparent">
-                    <Link href="/approvals">Review Approvals</Link>
+                    <Link href="/approvals">Revisar Aprovações</Link>
                   </Button>
                 )}
               </CardContent>
@@ -136,8 +136,8 @@ export default async function DashboardPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Recent Requests</CardTitle>
-                <CardDescription>Your latest flight requests</CardDescription>
+                <CardTitle>Solicitações Recentes</CardTitle>
+                <CardDescription>Suas últimas solicitações de voo</CardDescription>
               </CardHeader>
               <CardContent>
                 {requests && requests.length > 0 ? (
@@ -166,11 +166,11 @@ export default async function DashboardPage() {
                       </div>
                     ))}
                     <Button asChild variant="ghost" className="w-full">
-                      <Link href="/requests">View all requests</Link>
+                      <Link href="/requests">Ver todas as solicitações</Link>
                     </Button>
                   </div>
                 ) : (
-                  <p className="text-center text-sm text-muted-foreground py-8">No requests yet</p>
+                  <p className="text-center text-sm text-muted-foreground py-8">Nenhuma solicitação ainda</p>
                 )}
               </CardContent>
             </Card>

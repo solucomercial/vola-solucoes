@@ -30,7 +30,7 @@ export default async function FlightSearchPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <Plane className="h-4 w-4 text-primary-foreground" />
               </div>
-              <h1 className="text-xl font-semibold">Search Flights</h1>
+              <h1 className="text-xl font-semibold">Pesquisar voos</h1>
             </div>
           </div>
           <UserNav user={profile || {}} />
@@ -41,8 +41,8 @@ export default async function FlightSearchPage() {
         <div className="container py-8 px-4">
           <div className="mx-auto max-w-4xl">
             <div className="mb-8">
-              <h2 className="text-3xl font-bold">Find Your Flight</h2>
-              <p className="text-muted-foreground">Search for available flights and create a request</p>
+              <h2 className="text-3xl font-bold">Encontre o seu voo</h2>
+              <p className="text-muted-foreground">Pesquise voos disponíveis e crie uma solicitação</p>
             </div>
 
             <FlightSearchForm userId={data.user.id} />

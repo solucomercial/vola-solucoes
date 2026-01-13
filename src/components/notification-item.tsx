@@ -63,7 +63,7 @@ export function NotificationItem({ notification }: NotificationItemProps) {
               <h4 className="font-semibold">{notification.title}</h4>
               {!notification.read && (
                 <Badge variant="secondary" className="text-xs">
-                  New
+                  Nova
                 </Badge>
               )}
             </div>

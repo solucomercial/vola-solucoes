@@ -89,15 +89,15 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
         </Button>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject Request</DialogTitle>
-            <DialogDescription>Please provide a reason for rejecting this request</DialogDescription>
+            <DialogTitle>Rejeitar solicitação</DialogTitle>
+            <DialogDescription>Por favor, forneça um motivo para rejeitar esta solicitação</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="reject-comments">Comments *</Label>
+              <Label htmlFor="reject-comments">Comentários *</Label>
               <Textarea
                 id="reject-comments"
-                placeholder="Explain why this request is being rejected..."
+                placeholder="Explique o motivo da rejeição..."
                 rows={4}
                 value={comments}
                 onChange={(e) => setComments(e.target.value)}
@@ -106,7 +106,7 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpenReject(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button variant="destructive" onClick={handleReject} disabled={isRejecting || !comments.trim()}>
               {isRejecting ? "Rejecting..." : "Reject Request"}
@@ -118,16 +118,16 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
       <Dialog open={openApprove} onOpenChange={setOpenApprove}>
         <Button onClick={() => setOpenApprove(true)}>
           <Check className="h-4 w-4 mr-1" />
-          Approve
+          Aprovar
         </Button>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Approve Request</DialogTitle>
-            <DialogDescription>Confirm approval of this flight request</DialogDescription>
+            <DialogTitle>Aprovar solicitação</DialogTitle>
+            <DialogDescription>Confirmar aprovação desta solicitação de voo</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="approve-comments">Comments (optional)</Label>
+              <Label htmlFor="approve-comments">Comentários (optional)</Label>
               <Textarea
                 id="approve-comments"
                 placeholder="Add any additional notes..."
@@ -139,7 +139,7 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpenApprove(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button onClick={handleApprove} disabled={isApproving}>
               {isApproving ? "Approving..." : "Approve Request"}

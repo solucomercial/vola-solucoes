@@ -11,7 +11,7 @@ export default function SignupSuccessPage() {
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
             <Plane className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-semibold">Flight Request System</h1>
+          <h1 className="text-2xl font-semibold">Sistema de solicitação de voo</h1>
         </div>
 
         <Card>
@@ -19,18 +19,17 @@ export default function SignupSuccessPage() {
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Mail className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-xl">Check your email</CardTitle>
+            <CardTitle className="text-xl">Verifique seu e-mail</CardTitle>
             <CardDescription>
-              We&apos;ve sent you a confirmation link. Please check your email to verify your account and complete the
-              signup process.
+              Enviamos um link de confirmação para o seu e-mail. Por favor, verifique seu e-mail para verificar sua conta e concluir o processo de inscrição.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <p className="text-center text-sm text-muted-foreground">
-              After confirming your email, you&apos;ll be able to sign in and start managing your flight requests.
+              Após confirmar seu e-mail, você poderá fazer login e começar a gerenciar suas solicitações de voo.
             </p>
             <Button asChild>
-              <Link href="/auth/login">Return to sign in</Link>
+              <Link href="/auth/login">Voltar para o login</Link>
             </Button>
           </CardContent>
         </Card>

@@ -52,22 +52,22 @@ export function RequestActions({ requestId, status }: RequestActionsProps) {
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm">
           <Trash2 className="h-4 w-4 mr-1" />
-          Cancel
+          Cancelar
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Cancel Request</DialogTitle>
+          <DialogTitle>Cancelar Solicitação</DialogTitle>
           <DialogDescription>
-            Are you sure you want to cancel this request? This action cannot be undone.
+            Tem certeza que deseja cancelar esta solicitação? Esta ação não pode ser desfeita.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>
-            Keep Request
+            Manter solicitação
           </Button>
           <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-            {isDeleting ? "Canceling..." : "Cancel Request"}
+            {isDeleting ? "Cancelando..." : "Cancelar Solicitação"}
           </Button>
         </DialogFooter>
       </DialogContent>

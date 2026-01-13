@@ -74,20 +74,20 @@ export default function SignupPage() {
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
             <Plane className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-semibold">Flight Request System</h1>
-          <p className="text-sm text-muted-foreground">Create your account</p>
+          <h1 className="text-2xl font-semibold">Sistema de Solicitação de Voos</h1>
+          <p className="text-sm text-muted-foreground">Crie sua conta</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl">Create an account</CardTitle>
-            <CardDescription>Enter your information to get started</CardDescription>
+            <CardTitle className="text-xl">Criar uma conta</CardTitle>
+            <CardDescription>Digite suas informações para começar</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSignup}>
               <div className="flex flex-col gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="fullName">Full Name</Label>
+                  <Label htmlFor="fullName">Nome Completo</Label>
                   <Input
                     id="fullName"
                     type="text"
@@ -98,18 +98,18 @@ export default function SignupPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">E-mail</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="name@company.com"
+                    placeholder="name@empresa.com"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="department">Department</Label>
+                  <Label htmlFor="department">Departamento</Label>
                   <Input
                     id="department"
                     type="text"
@@ -119,20 +119,20 @@ export default function SignupPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="role">Role</Label>
+                  <Label htmlFor="role">Quem é você?</Label>
                   <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })}>
                     <SelectTrigger id="role">
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="employee">Employee</SelectItem>
-                      <SelectItem value="approver">Approver</SelectItem>
+                      <SelectItem value="employee">Solicitante</SelectItem>
+                      <SelectItem value="approver">Aprovador</SelectItem>
                       <SelectItem value="admin">Admin</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Senha</Label>
                   <Input
                     id="password"
                     type="password"
@@ -142,7 +142,7 @@ export default function SignupPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                   <Input
                     id="confirmPassword"
                     type="password"
@@ -161,9 +161,9 @@ export default function SignupPage() {
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
+                Já tem uma conta?{" "}
                 <Link href="/auth/login" className="font-medium text-primary underline-offset-4 hover:underline">
-                  Sign in
+                  Entrar
                 </Link>
               </div>
             </form>

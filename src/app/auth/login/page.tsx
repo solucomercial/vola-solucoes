@@ -48,20 +48,20 @@ export default function LoginPage() {
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
             <Plane className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-semibold">Flight Request System</h1>
-          <p className="text-sm text-muted-foreground">Manage your corporate travel requests</p>
+          <h1 className="text-2xl font-semibold">Sistema de Solicitação de Voos</h1>
+          <p className="text-sm text-muted-foreground">Gerencie suas solicitações de viagem corporativa</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl">Sign in to your account</CardTitle>
-            <CardDescription>Enter your credentials to access the platform</CardDescription>
+            <CardTitle className="text-xl">Entre na sua conta</CardTitle>
+            <CardDescription>Digite suas credenciais para acessar a plataforma</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">E-mail</Label>
                   <Input
                     id="email"
                     type="email"
@@ -72,7 +72,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Senha</Label>
                   <Input
                     id="password"
                     type="password"
@@ -87,13 +87,13 @@ export default function LoginPage() {
                   </Alert>
                 )}
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign in"}
+                  {isLoading ? "Entrando..." : "Entrar"}
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm text-muted-foreground">
-                Don&apos;t have an account?{" "}
+                Não tem uma conta?{" "}
                 <Link href="/auth/signup" className="font-medium text-primary underline-offset-4 hover:underline">
-                  Sign up
+                  Cadastrar-se
                 </Link>
               </div>
             </form>
