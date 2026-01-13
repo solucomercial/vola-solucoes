@@ -83,7 +83,7 @@ export function NotificationsBell({ notifications, unreadCount }: NotificationsB
             </DropdownMenuItem>
           </>
         ) : (
-          <div className="py-6 text-center text-sm text-muted-foreground">No notifications</div>
+          <div className="py-6 text-center text-sm text-muted-foreground">Nenhuma notificação</div>
         )}
       </DropdownMenuContent>
     </DropdownMenu>

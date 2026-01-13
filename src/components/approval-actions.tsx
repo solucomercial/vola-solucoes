@@ -85,7 +85,7 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
       <Dialog open={openReject} onOpenChange={setOpenReject}>
         <Button variant="outline" onClick={() => setOpenReject(true)}>
           <X className="h-4 w-4 mr-1" />
-          Reject
+          Rejeitar
         </Button>
         <DialogContent>
           <DialogHeader>
@@ -109,7 +109,7 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleReject} disabled={isRejecting || !comments.trim()}>
-              {isRejecting ? "Rejecting..." : "Reject Request"}
+              {isRejecting ? "Rejeitando..." : "Rejeitar Solicitação"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -130,7 +130,7 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
               <Label htmlFor="approve-comments">Comentários (optional)</Label>
               <Textarea
                 id="approve-comments"
-                placeholder="Add any additional notes..."
+                placeholder="Adicione quaisquer observações adicionais..."
                 rows={4}
                 value={comments}
                 onChange={(e) => setComments(e.target.value)}
@@ -142,7 +142,7 @@ export function ApprovalActions({ requestId, approverId }: ApprovalActionsProps)
               Cancelar
             </Button>
             <Button onClick={handleApprove} disabled={isApproving}>
-              {isApproving ? "Approving..." : "Approve Request"}
+              {isApproving ? "Aprovando..." : "Aprovar Solicitação"}
             </Button>
           </DialogFooter>
         </DialogContent>

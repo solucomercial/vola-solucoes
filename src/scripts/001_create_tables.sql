@@ -247,12 +247,12 @@ begin
   values (
     request_user_id,
     case
-      when new.status = 'approved' then 'Request Approved'
-      else 'Request Rejected'
+      when new.status = 'approved' then 'Solicitação aprovada'
+      else 'Solicitação rejeitada'
     end,
     case
-      when new.status = 'approved' then 'Your flight request has been approved by ' || approver_name
-      else 'Your flight request has been rejected by ' || approver_name
+      when new.status = 'approved' then 'Seu pedido de voo foi aprovado por ' || approver_name
+      else 'Seu pedido de voo foi rejeitado por ' || approver_name
     end,
     case
       when new.status = 'approved' then 'request_approved'
