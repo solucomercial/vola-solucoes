@@ -87,7 +87,7 @@ export default async function ApprovalsPage() {
             <Tabs defaultValue="pending" className="w-full">
               <TabsList className="grid w-full max-w-md grid-cols-2">
                 <TabsTrigger value="pending">
-                  Pending {pendingCount > 0 && <Badge className="ml-2">{pendingCount}</Badge>}
+                  Pendentes {pendingCount > 0 && <Badge className="ml-2">{pendingCount}</Badge>}
                 </TabsTrigger>
                 <TabsTrigger value="history">Histórico</TabsTrigger>
               </TabsList>
